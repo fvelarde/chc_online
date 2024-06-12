@@ -2,21 +2,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: [
-            {
-                title: 'Plot Image',
-                start: '2022-01-01',
-                end: '2022-01-31',
-                url: 'https://raw.githubusercontent.com/fvelarde/chc_online/main/plots/2022-01-01.png',
-            },
-            {
-                title: 'Plot Image',
-                start: '2022-02-01',
-                end: '2022-02-28',
-                url: 'https://raw.githubusercontent.com/fvelarde/chc_online/main/plots/2022-02-01.png',
-            },
-            // Add more events here
-        ],
+        dateClick: function(info) {
+            const dateStr = info.dateStr;
+            const dateParts = dateStr.split('-');
+            const year = dateParts[0];
+            const month = dateParts[1];
+            const day = dateParts[2];
+            const fileName = `${year}-${month}-${day}.png`;
+            const url = `https://raw.githubusercontent.com/fvelarde/chc_online/main/plots/${fileName}`;
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `Plot Image for ${dateStr}`;
+            document.body.appendChild(img);
+        },
     });
     calendar.render();
 });
