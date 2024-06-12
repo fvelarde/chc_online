@@ -1,15 +1,70 @@
+<!-- calendar.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Plot Images</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css">
+    <title>Calendar</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Plot Images</h1>
-    <div id="calendar"></div>
+    <h1>Calendar</h1>
+    <table id="calendar">
+        <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+    </table>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Get the calendar table
+        const calendarTable = document.getElementById('calendar');
+
+        // Get the plots folder files
+        const plotsFolder = 'plots';
+        const files = [];
+        const fileReader = new FileReader();
+        fileReader.onload = function(event) {
+            const filesString = event.target.result;
+            const filesArray = filesString.split('\n');
+            filesArray.forEach(file => {
+                if (file.includes('.png')) {
+                    files.push(file);
+                }
+            });
+            files.sort((a, b) => {
+                const dateA = new Date(a.replace('.png', ''));
+                const dateB = new Date(b.replace('.png', ''));
+                return dateA - dateB;
+            });
+            populateCalendar();
+        };
+        fileReader.readAsText(new Blob([fs.readdirSync(plotsFolder).join('\n')]), 'text/plain');
+
+        function populateCalendar() {
+            files.forEach((file, index) => {
+                const date = new Date(file.replace('.png', ''));
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                const dayString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}.png`;
+                const dayElement = calendarTable.rows[month - 1].cells[day];
+                if (dayElement) {
+                    dayElement.innerHTML = `<a href="${dayString}">${day}</a>`;
+                }
+            });
+        }
+    </script>
 </body>
 </html>
