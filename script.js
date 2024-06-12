@@ -2,7 +2,7 @@
 const imageContainer = document.getElementById('image-container');
 
 // Get the folder path
-const folderPath = 'https://raw.githubusercontent.com/fvelarde/chc_online/main/plots/'; // Update this to match your folder path
+const folderPath = 'plots/'; // Update this to match your folder path
 
 // Get the files in the folder
 fetch(folderPath)
