@@ -55,3 +55,13 @@ function populateCalendar() {
     calendarTableBody.appendChild(row);
   }
 }
+
+// Add event listeners to the day elements
+const dayElements = document.querySelectorAll('.days div');
+dayElements.forEach((day) => {
+  day.addEventListener('click', (e) => {
+    const selectedDate = e.target.dataset.date;
+    const figureLink = `${plotsFolder}${selectedDate}`;
+    window.open(figureLink, '_blank');
+  });
+});
