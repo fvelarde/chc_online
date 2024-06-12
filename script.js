@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             img.alt = `Plot Image for ${dateStr}`;
             document.body.appendChild(img);
         },
+        plugins: ['interaction'],
     });
     calendar.render();
 });
