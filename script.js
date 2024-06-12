@@ -1,29 +1,14 @@
-// Get the container elements
-const imageContainer = document.getElementById('image-container');
-const calendarContainer = document.getElementById('calendar');
+// Get the container element
+const calendarContainer = document.getElementById('calendar-container');
 
-// GitHub API endpoint
-const apiUrl = 'https://api.github.com/repos/fvelarde/chc_online/contents/plots';
+// Create the calendar
+const calendar = document.createElement('div');
+calendar.className = 'calendar';
 
-// Fetch the contents of the plots folder
-fetch(apiUrl)
+// Loop through the files and create calendar elements
+fetch('https://api.github.com/repos/fvelarde/chc_online/contents/plots')
     .then(response => response.json())
     .then(data => {
-        // Loop through the files and create image elements
-        data.forEach(file => {
-            if (file.type === 'file') {
-                const img = document.createElement('img');
-                img.src = file.download_url;
-                img.alt = file.name;
-                imageContainer.appendChild(img);
-            }
-        });
-
-        // Create the calendar
-        const calendar = document.createElement('div');
-        calendar.className = 'calendar';
-
-        // Loop through the files and create calendar elements
         data.forEach(file => {
             if (file.type === 'file') {
                 const date = file.name.split('-');
