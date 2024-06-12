@@ -14,7 +14,7 @@ fetch(plotsFolder)
     const links = doc.getElementsByTagName('a');
     for (let i = 0; i < links.length; i++) {
       const file = links[i].getAttribute('href');
-      if (file.endsWith('.png')) {
+      if (file.includes('.png')) {
         files.push(file);
       }
     }
@@ -40,7 +40,7 @@ function populateCalendar() {
       } else if (day > daysInMonth) {
         break;
       } else {
-        const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const dateString = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}.png`;
         const figureIndex = files.findIndex(file => file.includes(dateString));
         if (figureIndex !== -1) {
           const figureLink = `${plotsFolder}${files[figureIndex]}`;
