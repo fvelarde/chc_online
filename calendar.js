@@ -2,7 +2,7 @@
 const calendarTableBody = document.getElementById('calendar').getElementsByTagName('tbody')[0];
 
 // Get the plots folder files
-const plotsFolder = 'plots/';
+const plotsFolder = 'https://raw.githubusercontent.com/fvelarde/chc_online/master/plots/';
 const files = [];
 
 // Read the files in the plots folder
