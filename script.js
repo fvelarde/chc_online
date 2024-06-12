@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.appendChild(img);
         },
         plugins: ['interaction'],
+        dayClick: function(date, jsEvent, view) {
+            if (date.format() === '2023-08-29') {
+                return false;
+            }
+        },
     });
     calendar.render();
 });
