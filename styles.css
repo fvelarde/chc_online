@@ -1,17 +1,16 @@
-#calendar-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+#calendar {
+    max-width: 800px;
+    margin: 40px auto;
 }
 
-.calendar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.fc-event {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-.calendar-date {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 10px;
+.fc-event:hover {
+    background-color: #3e8e41;
 }
