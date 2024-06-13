@@ -1,0 +1,24 @@
+name: Run Python Code
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install Python and dependencies
+        run: |
+          pip install matplotlib pandas
+      - name: Run Python script
+        run: |
+          python your_script.py
+      - name: Deploy result
+        uses: actions/upload-artifact@v2
+        with:
+          name: result
+          path: your_script_result.png
