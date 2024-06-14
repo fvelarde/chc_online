@@ -1,32 +1,75 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Interactive Calendar</title>
-    <script src="https://cdn.jsdelivr.net/npm/tkcalendar@1.6.1/dist/tkcalendar.min.js"></script>
-</head>
-<body>
-    <h1>Interactive Calendar</h1>
-    <script>
-        // Create the main window
-        var root = Tk();
-        root.title("Time Series Data");
+import pandas as pd
+from bokeh.io import curdoc, save
+from bokeh.models import ColumnDataSource, HoverTool, DatetimeTickFormatter
+from bokeh.plotting import figure
+from bokeh.layouts import column
+from bokeh.models.widgets import DateRangeSlider, Select
+from bokeh.application import Application
+from bokeh.application.handlers import FunctionHandler
+from bokeh.embed import components
+from bokeh.models import HoverTool, ColumnDataSource
+from bokeh.plotting import figure, show
+import datetime
 
-        // Create a calendar widget
-        var calendar = Calendar(root, selectmode='day', year=2024, month=5, day=25);
-        calendar.pack(fill='both', expand=true);
+# Load the data
+def read_thref(file):
+    df = pd.read_csv(file, sep=',', skiprows=1, na_values=['NaN', '-999.0'])
+    df = df.drop([0,1])
 
-        // Set the calendar to update the figure when a date is selected
-        function update_selected_dates(date) {
-            // Your code to update the selected date goes here
-            console.log("Selected Date: " + date.strftime('%Y-%m-%d'));
-        }
+    df = df.set_index(pd.DatetimeIndex(df['TIMESTAMP']))
+    df.index.names = ['date']
+    df = df.drop('TIMESTAMP', axis=1)
+    df = df.astype(float)
+    return df
 
-        calendar.bind('<<CalendarSelected>>', function(event) {
-            update_selected_dates(calendar.selection_get());
-        });
+# Function to update the selected dates
+def update_selected_dates(date_range, df):
+    # Convert the float value to a datetime object
+    start_date = datetime.datetime.fromtimestamp(date_range[0] / 1000.0)
+    end_date = datetime.datetime.fromtimestamp(date_range[1] / 1000.0)
 
-        // Run the Tkinter event loop
-        root.mainloop();
-    </script>
-</body>
-</html>
+    df_selected = df.loc[start_date:end_date]
+    source.data = {'date': df_selected.index.tolist(), 'value': df_selected['R1_T_Avg'].values.tolist()}
+
+# Function to create the plot
+def create_plot(df):
+    source = ColumnDataSource(data={'date': df.index.tolist(), 'value': df['R1_T_Avg'].values.tolist()})
+
+    plot = figure(title="Time Series Data", x_axis_type="datetime", tools="pan,wheel_zoom,reset")
+    plot.line('date', 'value', source=source, legend_label="R1_T_Avg", line_width=2)
+
+    hover = HoverTool(tooltips=[
+        ("Date", "@date{%F}"),
+        ("Value", "@value"),
+    ])
+    plot.add_tools(hover)
+
+    return plot, source
+
+# Load the data
+file_thref = "/home/fhertop/THref/data/20240527/THref_TH_1min_terraza.dat"
+df = read_thref(file_thref)
+
+# Create the plot
+plot, source = create_plot(df)
+
+# Create the date range slider
+date_range_slider = DateRangeSlider(start=df.index.min().timestamp(), end=df.index.max().timestamp(), value=(df.index.min().timestamp(), df.index.max().timestamp()), step=1)
+
+# Create the select widget
+select = Select(title="Select a date", options=df.index.strftime('%Y-%m-%d').tolist())
+
+# Function to update the plot based on the date range and select widget
+def update():
+    date_range = date_range_slider.value
+    selected_date = select.value
+    update_selected_dates(date_range, df)
+
+# Update the plot based on the initial date range and select widget
+update()
+
+# Create the layout
+layout = column(date_range_slider, select, plot)
+
+# Save the application as an HTML file
+save([layout], "time_series_data.html")
