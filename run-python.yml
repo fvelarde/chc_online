@@ -1,4 +1,4 @@
-name: Run Python Code
+name: Run Tkinter Program
 
 on:
   push:
@@ -6,19 +6,15 @@ on:
       - main
 
 jobs:
-  run-python:
+  run-tkinter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install Python and dependencies
+      - name: Install Python and Tkinter
         run: |
-          pip install matplotlib pandas
-      - name: Run Python script
+          pip install tk
+      - name: Run Tkinter Program
         run: |
-          python your_script.py
-      - name: Deploy result
-        uses: actions/upload-artifact@v2
-        with:
-          name: result
-          path: your_script_result.png
+          python calendar_web_03.py
+
