@@ -7,16 +7,26 @@
     <h1>Interactive Calendar</h1>
     <script src="https://cdn.jsdelivr.net/npm/tkcalendar@1.6.1/dist/tkcalendar.min.js"></script>
     <script>
-        var calendar = new Calendar(document.getElementById('calendar'));
-        calendar.selectmode = 'day';
-        calendar.year = 2024;
-        calendar.month = 5;
-        calendar.day = 25;
-        calendar.bind('<<CalendarSelected>>', function(event) {
-            // Your code to update the selected date goes here
-            console.log(calendar.selection_get());
-        });
+        import tkinter as tk
+        from tkcalendar import Calendar
+
+        # Create the main window
+        root = tk.Tk()
+        root.title("Time Series Data")
+
+        # Create a calendar widget
+        calendar = Calendar(root, selectmode='day', year=2024, month=5, day=25)
+        calendar.pack(fill='both', expand=True)
+
+        # Set the calendar to update the figure when a date is selected
+        def update_selected_dates(date):
+            # Your code to update the selected date goes here
+            print(f"Selected Date: {date.strftime('%Y-%m-%d')}")
+
+        calendar.bind('<<CalendarSelected>>', lambda event: update_selected_dates(calendar.selection_get()))
+
+        # Run the Tkinter event loop
+        root.mainloop()
     </script>
-    <div id="calendar"></div>
 </body>
 </html>
