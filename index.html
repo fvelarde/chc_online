@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Calendar</title>
+</head>
+<body>
+    <h1>Interactive Calendar</h1>
+    <script src="https://cdn.jsdelivr.net/npm/tkcalendar@1.6.1/dist/tkcalendar.min.js"></script>
+    <script>
+        var calendar = new Calendar(document.getElementById('calendar'));
+        calendar.selectmode = 'day';
+        calendar.year = 2024;
+        calendar.month = 5;
+        calendar.day = 25;
+        calendar.bind('<<CalendarSelected>>', function(event) {
+            // Your code to update the selected date goes here
+            console.log(calendar.selection_get());
+        });
+    </script>
+    <div id="calendar"></div>
+</body>
+</html>
